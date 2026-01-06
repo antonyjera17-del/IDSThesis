@@ -1,11 +1,11 @@
 Flask==3.0.3
-pandas==2.2.2
-numpy==2.0.1
+pandas==2.1.4
+numpy==1.26.4
 joblib==1.4.2
 reportlab==4.2.2
 Flask-Login==0.6.3
 Flask-Bcrypt==1.0.1
 Flask-Mail==0.9.1
 python-dotenv==1.0.1
-scikit-learn==1.5.1
+scikit-learn==1.4.2
 gunicorn==22.0.0
