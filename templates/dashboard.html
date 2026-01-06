@@ -1,0 +1,248 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- PAGE TITLE -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3 class="mb-0">Security Overview</h3>
+ 
+</div>
+<div class="section-box">
+      <div class="section-title" style="font-weight: bolder;";">Key Security Indicators</div>
+<!-- KPI ROW 1 -->
+<div class="row g-4">
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">Total URLs</h6>
+      <h2>{{ total }}</h2>
+      <div class="small text-muted">All processed records</div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">Malicious</h6>
+      <h2 class="text-danger">{{ malicious }}</h2>
+      <a class="small" href="/urls?filter=bad&sort=ts&order=desc">View malicious logs →</a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">Benign</h6>
+      <h2 class="text-success">{{ benign }}</h2>
+      <a class="small" href="/urls?filter=good&sort=ts&order=desc">View benign logs →</a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">Malicious Rate</h6>
+      <h2 class="text-warning">{{ pct_mal }}%</h2>
+      <div class="small text-muted">Malicious / Total</div>
+    </div>
+  </div>
+</div>
+
+<!-- KPI ROW 2 -->
+<div class="row g-4 mt-1">
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">High Risk (≥70)</h6>
+      <h2 class="text-danger">{{ high_risk }}</h2>
+      <div class="small text-muted">Priority investigation</div>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6">
+    <div class="card-secure text-center">
+      <h6 class="text-muted">Avg Risk Score</h6>
+      <h2 class="text-info">{{ avg_risk }}</h2>
+      <div class="small text-muted">0–100 severity</div>
+    </div>
+  </div>
+<br>
+  <div class="col-lg-6 col-md-12">
+    <div class="card-secure d-flex justify-content-between align-items-center">
+     
+      <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary btn-sm"
+           href="/download_filtered?filter=bad&sort=ts&order=desc">
+          Download Malicious CSV
+        </a>
+        <a class="btn btn-primary btn-sm"
+           href="/urls?filter=bad&sort=ts&order=desc">
+          Open Logs
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+<!-- CHARTS -->
+<div class="section-box">
+  <div class="section-title" style="font-weight: bolder;">Threat Analysis</div>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card-secure p-4">
+        <h5 class="text-center mb-3">Risk Score Distribution</h5>
+        <div class="chart-box">
+          <canvas id="riskChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card-secure p-4">
+        <h5 class="text-center mb-3">Malicious Threat Trend</h5>
+        <div class="chart-box">
+          <canvas id="trendChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- TABLES -->
+<div class="row g-4 mt-4">
+  <div class="col-lg-6">
+    <div class="card-secure p-4">
+      <h5 class="mb-3">Top Suspicious TLDs (Malicious Only)</h5>
+      <table class="table table-dark table-striped mb-0">
+        <thead>
+          <tr>
+            <th>TLD</th>
+            <th>Malicious Count</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in top_tlds %}
+          <tr>
+            <td>.{{ t.tld }}</td>
+            <td>{{ t.malicious_count }}</td>
+            <td><a class="small" href="/urls?q=.{{ t.tld }}&filter=bad">View →</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card-secure p-4">
+      <h5 class="mb-3">Top 10 High-Risk URLs</h5>
+      <table class="table table-dark table-striped mb-0">
+        <thead>
+          <tr>
+            <th>Risk</th>
+            <th>Prediction</th>
+            <th>URL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in top_urls %}
+          <tr>
+            <td><span class="badge bg-danger">{{ u.risk_score }}</span></td>
+            <td>
+              <span class="badge {{ 'bg-danger' if u.prediction=='bad' else 'bg-success' }}">
+                {{ 'Malicious' if u.prediction=='bad' else 'Benign' }}
+              </span>
+            </td>
+            <td style="max-width:380px; word-break:break-all;">
+              <a class="small" href="/urls?q={{ u.url|urlencode }}">{{ u.url }}</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- CHART SCRIPTS -->
+<script>
+/* Risk distribution chart */
+fetch("/riskdist")
+  .then(r => r.json())
+  .then(data => {
+    new Chart(document.getElementById("riskChart"), {
+      type: "bar",
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: "URLs",
+          data: data.values
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: "#E6EDF3" } },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: "Risk Band", color: "#9DA7B3" },
+            ticks: { color: "#9DA7B3" },
+            grid: { color: "#30363D" }
+          },
+          y: {
+            title: { display: true, text: "Count of URLs", color: "#9DA7B3" },
+            ticks: { color: "#9DA7B3" },
+            grid: { color: "#30363D" },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+
+/* Threat trend chart */
+fetch("/trenddata")
+  .then(res => res.json())
+  .then(data => {
+    new Chart(document.getElementById("trendChart"), {
+      type: "line",
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: "Malicious URLs",
+          data: data.values,
+          borderWidth: 2,
+          borderColor: "#E74C3C",
+          backgroundColor: "rgba(231, 76, 60, 0.15)",
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: "#E6EDF3" } },
+          tooltip: { enabled: true }
+        },
+        scales: {
+          x: {
+            title: { display: true, text: "Time Window", color: "#9DA7B3" },
+            ticks: { color: "#9DA7B3", maxRotation: 0, autoSkip: true },
+            grid: { color: "#30363D" }
+          },
+          y: {
+            title: { display: true, text: "Malicious Count", color: "#9DA7B3" },
+            ticks: { color: "#9DA7B3" },
+            grid: { color: "#30363D" },
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  });
+</script>
+
+{% endblock %}

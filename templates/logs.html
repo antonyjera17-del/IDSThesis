@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="bg-white p-4 rounded shadow-sm">
+  <h3>Recent Logs</h3>
+  <div class="table-responsive" style="max-height:70vh; overflow:auto;">
+    <table class="table table-striped">
+      <thead>
+        <tr><th>ID</th><th>Timestamp</th><th>URL</th><th>Pred</th><th>Prob</th><th>Features</th></tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td>{{ r.ts }}</td>
+          <td style="max-width:500px; word-break:break-all"><a href="#" onclick="navigator.clipboard.writeText(`{{r.url}}`)">Copy</a> &nbsp; {{ r.url }}</td>
+          <td>
+            <span class="badge {{ 'bg-danger' if r.prediction==1 else 'bg-success' }}">
+              {{ 'Malicious' if r.prediction==1 else 'Benign' }}
+            </span>
+          </td>
+          <td>{{ "%.4f"|format(r.prob) }}</td>
+          <td><pre class="small mb-0">{{ r.features }}</pre></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

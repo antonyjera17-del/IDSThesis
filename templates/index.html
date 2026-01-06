@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="grid md:grid-cols-3 gap-6">
+  <div class="md:col-span-2">
+    <div class="card p-6 bg-white shadow-sm rounded-lg">
+      <h2 class="h4 mb-3">Single URL / Request Check</h2>
+      <form action="/predict" method="post" class="space-y-3">
+        <input name="url" placeholder="Enter full URL or request string" required
+               class="form-control border rounded px-3 py-2 w-full" />
+        <div class="flex gap-2">
+          <button class="btn btn-primary" type="submit">Check Now</button>
+          <a class="btn btn-outline-secondary" href="/bulk_test">Bulk upload</a>
+        </div>
+      </form>
+
+      {% if result %}
+<div class="mt-4">
+  <div class="alert {{ 'alert-danger' if result=='Malicious' else 'alert-success' }}">
+    <div class="d-flex justify-content-between align-items-center">
+      <div>
+        <strong>{{ result }}</strong>
+        <div class="small text-muted mt-1">
+          Probability: <strong>{{ prob }}</strong> |
+          Risk Score: <strong>{{ risk_score }}/100</strong> |
+          Threshold: <strong>{{ threshold }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-secure mt-3">
+    <h6 class="mb-2">Why this decision?</h6>
+    <ul class="small mb-0">
+      {% for r in reasons %}
+        <li>{{ r }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+    </div>
+  </div>
+
+  <aside class="space-y-4">
+    <div class="bg-white p-4 rounded shadow-sm">
+      <h6 class="mb-2">Quick Tips</h6>
+      <ul class="list-unstyled small mb-0">
+        <li>✔ Test local apps only or with permission.</li>
+        <li>✔ Use CSV for bulk testing (column name: <code>url</code>).</li>
+        <li>✔ The model uses engineered URL & JS-proxy features.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white p-4 rounded shadow-sm">
+      <h6 class="mb-2">Status</h6>
+      <p class="small mb-0">Model loaded: <code>{{ model.__class__.__name__ if model else 'unknown' }}</code></p>
+    </div>
+  </aside>
+</div>
+{% endblock %}

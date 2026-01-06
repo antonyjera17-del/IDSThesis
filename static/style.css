@@ -1,0 +1,259 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #0D1117;
+    font-family: 'Inter', sans-serif;
+   background: linear-gradient(
+        180deg,
+        #0f172a 0%,
+        #111827 40%,
+        #0b1220 100%
+    );
+
+    color: #E5E7EB;
+}
+
+/* NAVBAR */
+.navbar {
+    background-color: #161B22 !important;
+}
+
+/* CARDS */
+.card-secure {
+    background: #161B22;
+    border: 1px solid #30363D;
+    border-radius: 10px;
+    padding: 20px;
+    transition: 0.2s ease;
+}
+
+.card-secure:hover {
+    border-color: #58A6FF;
+    box-shadow: 0 0 10px rgba(88, 166, 255, 0.4);
+}
+
+/* TABLES */
+.table-container {
+    max-height: 550px;
+    overflow-y: auto;
+    background-color: #161B22;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+        background: #0b1220;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1F242A;
+    z-index: 1;
+}
+
+.pagination .page-link {
+    background-color: #161B22;
+    border-color: #30363D;
+    color: #E6EDF3;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0D6EFD;
+    border-color: #0D6EFD;
+}
+/* BUTTONS */
+.btn-primary {
+    background-color: #58A6FF;
+    border-color: #58A6FF;
+}
+
+.btn-danger {
+    background-color: #E74C3C;
+    border-color: #E74C3C;
+}
+
+.btn-success {
+    background-color: #2ECC71;
+    border-color: #2ECC71;
+}
+
+/* SMALL DETAILS */
+a, .nav-link {
+    color: #9da7b3 !important;
+}
+
+a:hover, .nav-link:hover {
+    color: #58A6FF !important;
+}
+
+/* Scrollable table container */
+.table-container {
+    max-height: 550px;        /* shows all data properly */
+    overflow-y: auto;
+    border: 1px solid #30363D;
+    border-radius: 10px;
+}
+
+/* FIXED TABLE HEADER */
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #1F242A !important;
+    z-index: 2;
+    border-bottom: 2px solid #30363D;
+}
+
+/* Table look */
+.table {
+    margin: 0;
+    color: #E6EDF3;
+    background-color: #161B22;
+}
+
+.table tbody tr:hover {
+    background-color: #1B1F24;
+    cursor: pointer;
+}
+
+.table td, .table th {
+    padding: 12px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+/* Prediction Badges */
+.badge-good {
+    background-color: #2ECC71;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.badge-bad {
+    background-color: #E74C3C;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+#trendChart {
+    max-height: 350px;
+}
+
+
+
+#matrix {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.card-cyber {
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid #00ff88;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    border-radius: 12px;
+}
+
+.text-neon {
+    color: #00ff88;
+}
+
+.bad { 
+    color: #ff4444;
+    font-weight: bold;
+}
+
+.good {
+    color: #00ff88;
+}
+#matrixCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+/* UNIFIED CARD STYLE */
+.card-secure {
+    background: #161B22;
+    border: 1px solid #30363D;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* DASHBOARD CANVAS FIX */
+.chart-box {
+    height: 320px;
+}
+
+.chart-box canvas {
+    max-height: 100%;
+}
+/* ===== Dashboard Layout Improvements ===== */
+
+/* Page sections */
+.section-box {
+    background: #0f1621;
+    border: 1px solid #2d3748;
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 28px;
+
+    /* subtle depth */
+    box-shadow:
+        0 10px 20px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+/* Section title */
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #9DA7B3;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Card normalization */
+.card-secure {
+    background: #111827;
+    border: 1px solid #30363D;
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+}
+
+
+/* KPI cards */
+.kpi-card h2 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+/* Chart container fix */
+.chart-box {
+    height: 300px;
+        background: #0b1220;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+/* Tables inside dashboard */
+.dashboard-table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Improve link look */
+.card-secure a {
+    text-decoration: none;
+}
+
+.card-secure a:hover {
+    text-decoration: underline;
+}

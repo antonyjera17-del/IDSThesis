@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">Admin Control Panel</h3>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card-secure text-center">
+            <h6>Total URLs</h6>
+            <h3>{{ stats.total_urls }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-secure text-center">
+            <h6>Malicious</h6>
+            <h3 class="text-danger">{{ stats.malicious }}</h3>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card-secure text-center">
+            <h6>Benign</h6>
+            <h3 class="text-success">{{ stats.benign }}</h3>
+        </div>
+    </div>
+</div>
+
+<div class="card-secure mt-4">
+    <h6>Admin Actions</h6>
+    <ul class="small">
+        <li>View system-wide statistics</li>
+        <li>Monitor ML model performance</li>
+        <li>Authorize analyst access</li>
+        <li>Export full datasets</li>
+    </ul>
+</div>
+
+{% endblock %}
